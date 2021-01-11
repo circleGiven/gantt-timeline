@@ -1,10 +1,21 @@
-import React from "react";
-import { ViewMode } from "../../constants/viewMode";
+import React  from "react";
+import { ViewMode } from "../types/public-types";
 import { TopPartOfCalendar } from "./top-part-of-calendar";
-import { getLocaleMonth, getWeekNumberISO8601, } from "../helpers/date-helper";
+import {
+    getLocaleMonth,
+    getWeekNumberISO8601,
+} from "../helpers/date-helper";
 import styles from "./calendar.module.css";
 
-export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, fontFamily, fontSize, }) => {
+export const Calendar = ({
+                                                      dates,
+                                                      locale,
+                                                      viewMode,
+                                                      headerHeight,
+                                                      columnWidth,
+                                                      fontFamily,
+                                                      fontSize,
+                                                  }) => {
     const getCalendarValuesForMonth = () => {
         const topValues = [];
         const bottomValues = [];
@@ -42,6 +53,7 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
         }
         return [topValues, bottomValues];
     };
+
     const getCalendarValuesForWeek = () => {
         const topValues = [];
         const bottomValues = [];
@@ -56,6 +68,7 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
             }
             // bottom
             const bottomValue = `W${getWeekNumberISO8601(date)}`;
+
             bottomValues.push(
                 <text
                     key={date.getTime()}
@@ -88,6 +101,7 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
         }
         return [topValues, bottomValues];
     };
+
     const getCalendarValuesForDay = () => {
         const topValues = [];
         const bottomValues = [];
@@ -95,6 +109,7 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
         for (let i = 0; i < dates.length; i++) {
             const date = dates[i];
             const bottomValue = date.getDate().toString();
+
             bottomValues.push(
                 <text
                     key={date.getTime()}
@@ -105,10 +120,12 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
                     {bottomValue}
                 </text>
             );
-
-            if (i + 1 !== dates.length &&
-                date.getMonth() !== dates[i + 1].getMonth()) {
+            if (
+                i + 1 !== dates.length &&
+                date.getMonth() !== dates[i + 1].getMonth()
+            ) {
                 const topValue = getLocaleMonth(date, locale);
+
                 topValues.push(
                     <TopPartOfCalendar
                         key={topValue + date.getFullYear()}
@@ -124,11 +141,13 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
         }
         return [topValues, bottomValues];
     };
+
     const getCalendarValuesForOther = () => {
         const topValues = [];
         const bottomValues = [];
         const ticks = viewMode === ViewMode.HalfDay ? 2 : 4;
         const topDefaultHeight = headerHeight * 0.5;
+
         for (let i = 0; i < dates.length; i++) {
             const date = dates[i];
             const bottomValue = Intl.DateTimeFormat(locale, {
@@ -146,7 +165,6 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
                     {bottomValue}
                 </text>
             );
-
             if (i === 0 || date.getDate() !== dates[i - 1].getDate()) {
                 const topValue = `${date.getDate()} ${getLocaleMonth(date, locale)}`;
                 topValues.push(
@@ -180,7 +198,6 @@ export const Calendar = ({ dates, locale, viewMode, headerHeight, columnWidth, f
             [topValues, bottomValues] = getCalendarValuesForOther();
             break;
     }
-
     return (
         <g className="calendar" fontSize={fontSize} fontFamily={fontFamily}>
             <rect
